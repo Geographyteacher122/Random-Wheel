@@ -73,20 +73,19 @@ main{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;padding:0 16px 6p
 .area{flex:1 1 0;min-height:0;width:100%;position:relative}
 .wrap{position:absolute;left:50%;top:50%;width:var(--s,300px);height:var(--s,300px);transform:translate(-50%,-50%)}
 .wrap::after{content:'';position:absolute;left:14%;right:14%;bottom:-2%;height:6%;z-index:0;background:radial-gradient(ellipse at center,rgba(15,35,60,.4),transparent 70%)}
-.wrap::before{content:'';position:absolute;inset:4%;border-radius:50%;filter:blur(30px);opacity:.5;transition:opacity .6s;
-  background:conic-gradient(from 0deg,#ff4f8b,#ffc93c,#19d3da,#7a52ff,#ff4f8b);animation:spin 12s linear infinite}
-body.is-spinning .wrap::before{opacity:.9;animation-duration:3s}
+.wrap::before{content:'';position:absolute;inset:2%;border-radius:50%;filter:blur(26px);opacity:.45;transition:opacity .6s;background:radial-gradient(circle,rgba(255,236,205,.9),rgba(255,214,235,.5) 60%,transparent 72%)}
+body.is-spinning .wrap::before{opacity:.8}
 #wheel{position:absolute;inset:0;width:100%;height:100%;z-index:1}
 .pointer{position:absolute;z-index:3;transform-origin:50% 35%;filter:drop-shadow(0 5px 7px rgba(0,0,0,.55));pointer-events:none}
 .hub{position:absolute;z-index:2;left:50%;top:50%;width:calc(var(--s)*.2);height:calc(var(--s)*.2);margin:calc(var(--s)*-.1) 0 0 calc(var(--s)*-.1);
   border:0;border-radius:50%;color:#fff;font-weight:900;font-size:calc(var(--s)*.05);cursor:pointer;
-  background:radial-gradient(circle at 35% 28%,#ffa6c9,#ff4f8b 45%,#c2185b);
+  background:radial-gradient(circle at 35% 28%,#f9b3c5,#e8788f 48%,#b04468);
   box-shadow:0 0 0 calc(var(--s)*.008) #fff,0 10px 24px rgba(0,0,0,.5),inset 0 -8px 14px rgba(0,0,0,.22);
   transition:transform .15s,filter .3s}
 .hub:hover:not(:disabled){transform:scale(1.07)}
 .hub:active:not(:disabled){transform:scale(.93)}
 .hub:disabled{cursor:default;filter:saturate(.5) brightness(.85)}
-.hub::before{content:'';position:absolute;inset:0;border-radius:50%;border:3px solid #ff8fb8;animation:pulse 1.8s ease-out infinite;pointer-events:none}
+.hub::before{content:'';position:absolute;inset:0;border-radius:50%;border:3px solid #f6a8bd;animation:pulse 1.8s ease-out infinite;pointer-events:none}
 body.is-spinning .hub::before,.hub:disabled::before{animation:none;opacity:0}
 .live{height:46px;flex:none;display:flex;align-items:center;justify-content:center;max-width:100%;padding:0 18px;margin-top:6px;
   border-radius:999px;border:1px solid var(--line);background:var(--glass);font-weight:800;font-size:clamp(14px,2.2vw,18px);color:#fff}
@@ -184,6 +183,14 @@ textarea:read-only{opacity:.6}
 @media (prefers-reduced-motion:reduce){.logo,.wrap::before,.ray,.ff,.stars,.bob,.drift,.sway,.card .name,.modal::before{animation:none}}
 
 /* ===== الخلفية المصوّرة والطالبة ===== */
+.ringw{pointer-events:auto;cursor:pointer}
+.beam{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:6;opacity:0;transition:opacity .3s}
+.beam.on{opacity:1}
+.beam .b1{fill:none;stroke:rgba(255,236,180,.55);stroke-width:14;stroke-linecap:round;filter:blur(6px)}
+.beam .b2{fill:none;stroke:#fff;stroke-width:4.5;stroke-linecap:round;stroke-dasharray:2 16;animation:flow .45s linear infinite;filter:drop-shadow(0 0 5px #ffe7a8)}
+.beam .imp{fill:none;stroke:#fff;stroke-width:4;transform-box:fill-box;transform-origin:center;animation:imp .6s ease-out infinite}
+@keyframes flow{to{stroke-dashoffset:-18}}
+@keyframes imp{0%{transform:scale(.4);opacity:1}100%{transform:scale(1.8);opacity:0}}
 .bgart{background:#1d3a26}
 .bgimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 45%;animation:kb 45s ease-in-out infinite alternate}
 @keyframes kb{from{transform:scale(1)}to{transform:scale(1.07)}}
@@ -246,8 +253,8 @@ body.is-spinning .rip:nth-child(2){animation-delay:.4s}body.is-spinning .rip:nth
           <canvas id="wheel"></canvas>
           <svg class="pointer" id="pointer" viewBox="0 0 60 80" aria-hidden="true">
             <defs><linearGradient id="pg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#ffd9e8"/></linearGradient></defs>
-            <path d="M30 78C30 78 5 46 5 29a25 25 0 1 1 50 0C55 46 30 78 30 78Z" fill="url(#pg)" stroke="#2a0f66" stroke-width="3.5" stroke-linejoin="round"/>
-            <circle cx="30" cy="29" r="10" fill="#ff4f8b" stroke="#2a0f66" stroke-width="3"/>
+            <path d="M30 78C30 78 5 46 5 29a25 25 0 1 1 50 0C55 46 30 78 30 78Z" fill="url(#pg)" stroke="#5a3a6e" stroke-width="3.5" stroke-linejoin="round"/>
+            <circle cx="30" cy="29" r="10" fill="#e8788f" stroke="#5a3a6e" stroke-width="3"/>
           </svg>
           <button class="hub" id="hub" aria-label="إدارة العجلة">أدِر</button>
         </div>
@@ -292,13 +299,14 @@ body.is-spinning .rip:nth-child(2){animation-delay:.4s}body.is-spinning .rip:nth
     </div>
   </div>
 </div>
+<svg class="beam" id="beam" aria-hidden="true"><path class="b1" id="bp1"/><path class="b2" id="bp2"/><circle class="imp" id="bimp" r="26"/></svg>
 <canvas id="confetti"></canvas>
 
 <script>
 (() => {
 'use strict';
 const TAU = Math.PI * 2;
-const PALETTE = ['#ff4f8b','#ff8a3d','#ffc93c','#a8e063','#19c6d1','#2f6dff','#7a52ff','#c44be0'];
+const PALETTE = ['#e8788f','#6db6d8','#f4a95f','#a98bdc','#ee8f78','#c985d6'];
 const $ = s => document.querySelector(s);
 const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
 
@@ -333,7 +341,7 @@ let S=300, R, rimW, faceR, face=null, rims=[];
 function lum(h){ const n=parseInt(h.slice(1),16); return (0.299*(n>>16&255)+0.587*(n>>8&255)+0.114*(n&255))/255; }
 function shade(h,a){ const n=parseInt(h.slice(1),16); let r=n>>16&255,g=n>>8&255,b=n&255; const f=a<0?0:255,p=Math.abs(a);
   return `rgb(${Math.round((f-r)*p+r)},${Math.round((f-g)*p+g)},${Math.round((f-b)*p+b)})`; }
-function colorOf(i,N){ let c=i%PALETTE.length; if(i===N-1 && c===0 && N>1) c=4; return PALETTE[c]; }
+function colorOf(i,N){ let c=i%PALETTE.length; if(i===N-1 && c===0 && N>1) c=3; return PALETTE[c]; }
 const textOn = c => lum(c) > 0.52 ? '#2b0f54' : '#ffffff';
 
 /* ===== بناء العجلة ===== */
@@ -349,17 +357,17 @@ function makeRim(k){
   const x=c.getContext('2d'); x.setTransform(dpr,0,0,dpr,0,0);
   const cx=S/2, ol=Math.max(3,S*0.008);
   const g=x.createLinearGradient(0,cx-R,0,cx+R);
-  g.addColorStop(0,'#ffffff'); g.addColorStop(.55,'#e9e0ff'); g.addColorStop(1,'#b9a6ee');
+  g.addColorStop(0,'#fffaf2'); g.addColorStop(.55,'#f1e4f3'); g.addColorStop(1,'#d3bfe0');
   x.beginPath(); x.arc(cx,cx,R,0,TAU); x.arc(cx,cx,R-rimW,0,TAU,true); x.fillStyle=g; x.fill();
-  x.lineWidth=ol; x.strokeStyle='#2a0f66';
+  x.lineWidth=ol; x.strokeStyle='#5a3a6e';
   x.beginPath(); x.arc(cx,cx,R-ol/2,0,TAU); x.stroke();
   x.beginPath(); x.arc(cx,cx,R-rimW+ol/2,0,TAU); x.stroke();
-  const BC=['#ff4f8b','#19c6d1','#ffc93c'], nb=24, rb=rimW*0.27, pr=R-rimW/2;
+  const BC=['#fff1c2','#fff1c2','#fff1c2'], nb=24, rb=rimW*0.27, pr=R-rimW/2;
   for(let i=0;i<nb;i++){
     const a=i/nb*TAU-Math.PI/2, px=cx+Math.cos(a)*pr, py=cx+Math.sin(a)*pr, on=(i%3===k), col=BC[i%3];
     x.save();
-    if(on){ x.shadowColor=col; x.shadowBlur=rimW*1.1*dpr; }
-    x.fillStyle=on?col:shade(col,.55); x.strokeStyle='#2a0f66'; x.lineWidth=1.6;
+    if(on){ x.shadowColor='#ffe7a0'; x.shadowBlur=rimW*1.0*dpr; }
+    x.fillStyle=on?col:'#d9c9e3'; x.strokeStyle='rgba(90,58,110,.7)'; x.lineWidth=1.4;
     x.beginPath(); x.arc(px,py,on?rb*1.15:rb*.9,0,TAU); x.fill(); x.shadowBlur=0; x.stroke(); x.restore();
     if(on){ x.fillStyle='rgba(255,255,255,.85)'; x.beginPath(); x.arc(px-rb*.3,py-rb*.3,rb*.3,0,TAU); x.fill(); }
   }
@@ -380,11 +388,11 @@ function makeFace(){
   for(let i=0;i<N;i++){
     const col=colorOf(i,N), a0=i*seg-Math.PI/2, a1=a0+seg;
     const g=x.createRadialGradient(0,0,faceR*0.1,0,0,faceR);
-    g.addColorStop(0,shade(col,-0.28)); g.addColorStop(.55,col); g.addColorStop(1,shade(col,0.12));
+    g.addColorStop(0,shade(col,-0.10)); g.addColorStop(.6,col); g.addColorStop(1,shade(col,0.06));
     x.beginPath(); x.moveTo(0,0); x.arc(0,0,faceR,a0,a1); x.closePath(); x.fillStyle=g; x.fill();
-    x.lineWidth=3; x.lineJoin='round'; x.strokeStyle='#2a0f66'; x.stroke();
+    x.lineWidth=2.5; x.lineJoin='round'; x.strokeStyle='rgba(255,255,255,.9)'; x.stroke();
   }
-  x.lineWidth=5; x.strokeStyle='#2a0f66'; x.beginPath(); x.arc(0,0,faceR-1,0,TAU); x.stroke();
+  x.lineWidth=4; x.strokeStyle='#5a3a6e'; x.beginPath(); x.arc(0,0,faceR-1,0,TAU); x.stroke();
   // النصوص
   const xs=faceR*0.93, maxW=faceR*0.62;
   const fam='Tajawal,Cairo,"Segoe UI",Tahoma,sans-serif';
@@ -402,13 +410,12 @@ function makeFace(){
     while(fs>8 && fs>0.82*2*(xs-w)*Math.sin(seg/2) && guard++<40){ fs*=0.94; x.font=`800 ${fs}px ${fam}`; w=x.measureText(txt).width; }
     const flip=Math.cos(mid)<-0.0001;  // النصف الأيسر: نقلب النص ليبقى مقروءًا
     x.save(); x.rotate(flip?mid+Math.PI:mid); x.textAlign=flip?'left':'right'; x.textBaseline='middle'; x.direction='rtl';
-    x.lineJoin='round'; x.lineWidth=Math.max(2,fs*0.2); x.strokeStyle='#2a0f66'; x.strokeText(txt,flip?-xs:xs,0);
-    x.fillStyle='#fff'; x.fillText(txt,flip?-xs:xs,0); x.restore();
+    x.fillStyle='#3b1d52'; x.fillText(txt,flip?-xs:xs,0); x.restore();
   }
   // مسامير
   for(let i=0;i<N;i++){
     const a=i*seg-Math.PI/2, r=faceR*0.962;
-    x.save(); x.fillStyle='#fff'; x.strokeStyle='#2a0f66'; x.lineWidth=1.8;
+    x.save(); x.fillStyle='#fff'; x.strokeStyle='rgba(90,58,110,.6)'; x.lineWidth=1.2;
     x.beginPath(); x.arc(Math.cos(a)*r,Math.sin(a)*r,Math.max(2.4,faceR*0.017),0,TAU); x.fill(); x.stroke(); x.restore();
   }
   return c;
@@ -451,9 +458,21 @@ function spin(){
   state.spinning=true; winnerIdx=-1; glow=0;
   document.body.classList.add('is-spinning');
   listEl.readOnly=true; hub.disabled=true; hub.textContent='…';
+  fireBeam();
   const seg=TAU/N, pick=Math.floor(Math.random()*N);
   tgt=(pick+0.15+0.7*Math.random())*seg;
   phase='wind'; w0=performance.now(); thW=state.theta;
+}
+function fireBeam(){
+  try{
+    const m=$('#mascot').getBoundingClientRect(), w=wrap.getBoundingClientRect();
+    const fx=m.left+m.width*0.115, fy=m.top+m.height*0.235, cx=w.left+w.width/2, cy=w.top+w.height/2;
+    const dx=fx-cx, dy=fy-cy, d=Math.hypot(dx,dy)||1, ex=cx+dx/d*R*1.0, ey=cy+dy/d*R*1.0;
+    const qx=(fx+ex)/2, qy=(fy+ey)/2-d*0.12, dd=`M${fx.toFixed(1)} ${fy.toFixed(1)} Q${qx.toFixed(1)} ${qy.toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}`;
+    $('#bp1').setAttribute('d',dd); $('#bp2').setAttribute('d',dd);
+    const im=$('#bimp'); im.setAttribute('cx',ex.toFixed(1)); im.setAttribute('cy',ey.toFixed(1));
+    const bm=$('#beam'); bm.classList.add('on'); clearTimeout(fireBeam.t); fireBeam.t=setTimeout(()=>bm.classList.remove('on'),1900);
+  }catch(e){}
 }
 function launch(now){
   th0=state.theta;
@@ -494,15 +513,15 @@ function draw(now){
   if(N>=2){
     ctx.save(); ctx.beginPath(); ctx.arc(S/2,S/2,faceR,0,TAU); ctx.clip();
     const gl=ctx.createRadialGradient(S/2-faceR*.38,S/2-faceR*.55,faceR*.04,S/2-faceR*.38,S/2-faceR*.55,faceR*.95);
-    gl.addColorStop(0,'rgba(255,255,255,.4)'); gl.addColorStop(1,'rgba(255,255,255,0)');
+    gl.addColorStop(0,'rgba(255,255,255,.2)'); gl.addColorStop(1,'rgba(255,255,255,0)');
     ctx.fillStyle=gl; ctx.fillRect(0,0,S,S); ctx.restore();
   }
   const hr=S*0.125, g=ctx.createRadialGradient(S/2-hr*0.3,S/2-hr*0.3,hr*0.1,S/2,S/2,hr);
-  g.addColorStop(0,'#7a45e0'); g.addColorStop(1,'#2a0f66');
+  g.addColorStop(0,'#8a5a9c'); g.addColorStop(1,'#3a1d52');
   ctx.save(); ctx.shadowColor='rgba(0,0,0,.45)'; ctx.shadowBlur=12*dpr; ctx.fillStyle=g;
   ctx.beginPath(); ctx.arc(S/2,S/2,hr,0,TAU); ctx.fill(); ctx.restore();
   ctx.lineWidth=4; ctx.strokeStyle='#fff'; ctx.beginPath(); ctx.arc(S/2,S/2,hr,0,TAU); ctx.stroke();
-  ctx.lineWidth=2; ctx.strokeStyle='#2a0f66'; ctx.beginPath(); ctx.arc(S/2,S/2,hr+3,0,TAU); ctx.stroke();
+  ctx.lineWidth=2; ctx.strokeStyle='#5a3a6e'; ctx.beginPath(); ctx.arc(S/2,S/2,hr+3,0,TAU); ctx.stroke();
 }
 function frame(now){
   const dt=Math.min(0.05,(now-last)/1000); last=now;
@@ -603,6 +622,7 @@ fsb.onclick=()=>{ try{
 }catch(e){} };
 
 hub.onclick=spin;
+$('.ringw').addEventListener('click',spin);
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){ closeModal(); closeDrawer(); return; }
   if((e.key===' '||e.key==='Enter') && document.activeElement && document.activeElement.tagName!=='TEXTAREA' && document.activeElement.tagName!=='BUTTON'
